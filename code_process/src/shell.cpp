@@ -382,8 +382,16 @@ void Shell::exec(std::string cmd_list)
             std::cout<<InvHash(running_->getPid())<<" ";
             break;
         case "lp"_Hash:
+            if (LP_LTH!= tokens.size()){
+                std::cerr<<"format error: lp"<<std::endl;
+            }
+            listProc();
             break;
         case "lr"_Hash:
+            if (LR_LTH!= tokens.size()){
+                std::cerr<<"format error: lr"<<std::endl;
+            }
+            listResrc();
             break;
         default:
             break;
@@ -484,4 +492,58 @@ void Shell::relResrc(std::string &resrc, std::string &s_amt)
     if(WAKEN== releaseResrc(running_, work_r, amt)){
         scheduler();
     }
+}
+
+void Shell::listProc()
+{
+    std::cout<<"\n********************************************"<<std::endl;
+    std::cout<<"Running Process: "<<InvHash(running_->pid_)<<std::endl;
+    std::cout<<"--------------------------------------------"<<std::endl;
+
+    std::cout<<"Ready Process:"<<std::endl;
+    for (int pri= INIT; pri<= SYSTEM; ++pri){
+        std::string s_pri("INIT: ");
+        if (USER== pri){
+            s_pri= "USER: ";
+        }
+        else if (SYSTEM== pri){
+            s_pri= "SYSTEM: ";
+        }
+        std::cout<<s_pri;
+
+        for (std::list<PCB*>::iterator r_iter= priority_ready_[pri].begin();
+        priority_ready_[pri].end()!= r_iter; ++r_iter){
+            std::cout<<InvHash((*r_iter)->pid_)<<" ";
+        }
+        putchar('\n');
+    }
+
+    std::cout<<"Blocked Process: ";
+    for (std::list<PCB*>::iterator b_iter= priority_block_.begin();
+    priority_block_.end()!= b_iter; ++b_iter){
+        std::cout<<InvHash((*b_iter)->pid_)<<" ";
+    }
+    std::cout<<"\n********************************************"<<std::endl;
+}
+
+void Shell::listResrc()
+{
+    std::cout<<"\n********************************************"<<std::endl;
+    std::cout<<"Resources: "<<std::endl;
+
+    for (std::list<RCB*>::iterator r_iter= resource_pool_.begin();
+    resource_pool_.end()!= r_iter; ++r_iter){
+        std::cout<<"--------------------------------------------"<<std::endl;
+        std::cout<<"Resource "<<InvHash((*r_iter)->rid_)<<std::endl;
+        std::cout<<"available: "<<(*r_iter)->available_<<std::endl;
+        std::cout<<"waiting Process: ";
+
+        for (std::list<PCB*>::iterator w_iter= (*r_iter)->wait_l_.begin();
+        (*r_iter)->wait_l_.end()!= w_iter; ++w_iter){
+            std::cout<<InvHash((*w_iter)->pid_)<<" ";
+        }
+        putchar('\n');
+    }
+
+    std::cout<<"********************************************"<<std::endl;
 }

@@ -40,6 +40,8 @@ public:
     void destroyProc(std::string &process_name);
     void reqResrc(std::string &resrc, std::string &s_amt);
     void relResrc(std::string &resrc, std::string &s_amt);
+    void listProc();
+    void listResrc();
 };
 
 constexpr size_t CompilerBKDRHash(const char *str, size_t ret);

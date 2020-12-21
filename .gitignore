@@ -48,3 +48,4 @@
 # Unrelated Files
 draft/*
 os-test-shell-master/*
+**/test_case

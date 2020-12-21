@@ -18,6 +18,8 @@
 #define REQ_LTH 3
 #define REL_LTH 3
 #define TO_LTH 1
+#define LP_LTH 1
+#define LR_LTH 1
 #define ALLOC_ERROR -1
 #define REL_ERROR -2
 #define WAKE_NONE -1
