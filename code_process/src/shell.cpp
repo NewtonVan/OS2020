@@ -136,24 +136,24 @@ int Shell::releaseResrc(PCB* re_p, RCB* work_r, int amt)
         std::cerr<<"error: the amount process release should be non-negative"<<std::endl;
         return REL_ERROR;
     }
-    if (re_p->getResourceNum(work_r->getRid())< amt){
+    if (re_p->getResourceNum(work_r->rid_)< amt){
         std::cerr<<"error: too much resource for process to release"<<std::endl;
         return REL_ERROR;
     }
-    if (!checkInPool(work_r->getRid())){
+    if (!checkInPool(work_r->rid_)){
         std::cerr<<"error: resource released is not in pool"<<std::endl;
         return REL_ERROR;
     }
 
-    re_p->changeResourceNum(work_r->getRid(), -amt);
+    re_p->changeResourceNum(work_r->rid_, -amt);
     work_r->changeAvailable(amt);
 
     int wak= WAKE_NONE;
     while (!work_r->waitEmpty()){
         PCB* w_front= work_r->waitFront();
-        int w_pri= w_front->getPriority();
-        int wait_r_num= w_front->getWaitRNum();
-        if (wait_r_num > work_r->getAvailable()){
+        int w_pri= w_front->priority_;
+        int wait_r_num= w_front->wait_rnum_;
+        if (work_r->getAvailable() < wait_r_num){
             break;
         }
 
@@ -179,8 +179,8 @@ int Shell::releaseResrc(PCB* re_p, RCB* work_r, int amt)
 
 void Shell::releaseAllResrc(PCB* proc)
 {
-    if (WAIT_NONE!= proc->getWaitRid()){
-        RCB* wait_r= getResrcByRid(proc->getWaitRid());
+    if (WAIT_NONE!= proc->wait_rid_){
+        RCB* wait_r= getResrcByRid(proc->wait_rid_);
         wait_r->outLine(proc);
         proc->setWaitRid(WAIT_NONE);
         proc->setWaitRNum(WAIT_NONE);
@@ -265,10 +265,10 @@ void Shell::timeOut()
 
 void Shell::preempt(PCB* candidate)
 {
-    int c_pri= candidate->getPriority();
+    int c_pri= candidate->priority_;
 
-    if (NULL!= running_ && RUNNING== running_->getState()){
-        int r_pri= running_->getPriority();
+    if (NULL!= running_ && RUNNING== running_->state_){
+        int r_pri= running_->priority_;
         running_->setState(READY);
         priority_ready_[r_pri].push_back(running_);
     }
@@ -295,7 +295,7 @@ void Shell::scheduler()
 
     if ( NULL== running_
     || running_->getPriority() < candidate->getPriority()
-    || RUNNING!= running_->getState()){
+    || RUNNING!= running_->state_){
         preempt(candidate);
     }
 
@@ -485,18 +485,3 @@ void Shell::relResrc(std::string &resrc, std::string &s_amt)
         scheduler();
     }
 }
-
-
-            // // used for check removed later
-            // for (std::list<PCB*>::iterator r_iter= priority_ready_[0].begin();
-            // priority_ready_[0].end()!= r_iter; ++r_iter){
-            //     std::cout<<"init"<<InvHash((*r_iter)->getPid())<<std::endl;
-            // }
-            // for (std::list<PCB*>::iterator r_iter= priority_ready_[1].begin();
-            // priority_ready_[1].end()!= r_iter; ++r_iter){
-            //     std::cout<<"user"<<InvHash((*r_iter)->getPid())<<std::endl;
-            // }
-            // for (std::list<PCB*>::iterator r_iter= priority_ready_[2].begin();
-            // priority_ready_[2].end()!= r_iter; ++r_iter){
-            //     std::cout<<"syst"<<InvHash((*r_iter)->getPid())<<std::endl;
-            // }
