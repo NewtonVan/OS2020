@@ -31,4 +31,9 @@
 *.out
 *.app
 
+# Configuration
 **/.vscode/*
+
+# Docs and PPT
+*.doc?(x)
+*.ppt?(x)
