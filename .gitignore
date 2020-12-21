@@ -39,8 +39,12 @@
 **/.vscode/*
 
 # Docs and PPT
-*.doc?(x)
-*.ppt?(x)
+*.doc*
+*.ppt*
 
 # ZIP
 *.zip
+
+# Unrelated Files
+draft/*
+os-test-shell-master/*
