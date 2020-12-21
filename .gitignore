@@ -2,6 +2,8 @@
 *.d
 
 # Compiled Object files
+**/*.o
+**/*.obj
 *.slo
 *.lo
 *.o
@@ -27,6 +29,8 @@
 *.lib
 
 # Executables
+**/*.exe
+**/*.out
 *.exe
 *.out
 *.app
@@ -37,3 +41,6 @@
 # Docs and PPT
 *.doc?(x)
 *.ppt?(x)
+
+# ZIP
+*.zip
