@@ -496,8 +496,7 @@ void Shell::relResrc(std::string &resrc, std::string &s_amt)
 
 void Shell::listProc()
 {
-    putchar('\n');
-    std::cout<<"********************************************"<<std::endl;
+    std::cout<<"\n********************************************"<<std::endl;
     std::cout<<"Running Process: "<<InvHash(running_->pid_)<<std::endl;
     std::cout<<"--------------------------------------------"<<std::endl;
 
@@ -518,18 +517,33 @@ void Shell::listProc()
         }
         putchar('\n');
     }
-    std::cout<<"--------------------------------------------"<<std::endl;
 
     std::cout<<"Blocked Process: ";
     for (std::list<PCB*>::iterator b_iter= priority_block_.begin();
     priority_block_.end()!= b_iter; ++b_iter){
         std::cout<<InvHash((*b_iter)->pid_)<<" ";
     }
-    putchar('\n');
-    std::cout<<"********************************************"<<std::endl;
+    std::cout<<"\n********************************************"<<std::endl;
 }
 
 void Shell::listResrc()
 {
+    std::cout<<"\n********************************************"<<std::endl;
+    std::cout<<"Resources: "<<std::endl;
 
+    for (std::list<RCB*>::iterator r_iter= resource_pool_.begin();
+    resource_pool_.end()!= r_iter; ++r_iter){
+        std::cout<<"--------------------------------------------"<<std::endl;
+        std::cout<<"Resource "<<InvHash((*r_iter)->rid_)<<std::endl;
+        std::cout<<"available: "<<(*r_iter)->available_<<std::endl;
+        std::cout<<"waiting Process: ";
+
+        for (std::list<PCB*>::iterator w_iter= (*r_iter)->wait_l_.begin();
+        (*r_iter)->wait_l_.end()!= w_iter; ++w_iter){
+            std::cout<<InvHash((*w_iter)->pid_)<<" ";
+        }
+        putchar('\n');
+    }
+
+    std::cout<<"********************************************"<<std::endl;
 }
