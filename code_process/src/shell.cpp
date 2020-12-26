@@ -21,17 +21,6 @@ std::string InvHash(size_t hash_num)
     return origin;
 }
 
-// inline size_t CalcBKDRHash(const char *str)
-// {
-//     size_t hash= 0;
-
-//     while (*str){
-//         hash= hash*HASH_SEED+(*str++);
-//     }
-
-//     return hash & 0x7fffffff;
-// }
-
 constexpr size_t operator ""_Hash(const char *str, size_t sz)
 {
     return CompilerBKDRHash(str);
@@ -49,13 +38,6 @@ Shell::~Shell()
     creation_tree_= NULL;
     delete [] resource_pool_.front();
     
-    // prepare for possible extension
-    // for (std::list<RCB*>::iterator rIter= resource_pool_.begin();
-    // resource_pool_.end()!= rIter; ++rIter){
-    //     delete *rIter;
-    //     *rIter= NULL;
-    // }
-    // resource_pool_.clear();
 }
 
 PCB* Shell::getProcByPid(const int pid, PCB* rt)
@@ -256,6 +238,9 @@ void Shell::destroyCProc(PCB* c_proc)
     delete c_proc;
 }
 
+/**
+ * handle to
+ */
 void Shell::timeOut()
 {
     running_->setState(READY);
@@ -398,6 +383,9 @@ void Shell::exec(std::string cmd_list)
     }
 }
 
+/**
+ * handle init
+ */
 void Shell::init()
 {
     if (NULL!= creation_tree_){
@@ -474,6 +462,9 @@ void Shell::destroyProc(std::string &process_name)
     scheduler();
 }
 
+/**
+ * handle req
+ */
 void Shell::reqResrc(std::string &resrc, std::string &s_amt)
 {
     int rid= CalcBKDRHash(resrc);
@@ -484,6 +475,9 @@ void Shell::reqResrc(std::string &resrc, std::string &s_amt)
     }
 }
 
+/**
+ * handle rel
+ */
 void Shell::relResrc(std::string &resrc, std::string &s_amt)
 {
     int rid= CalcBKDRHash(resrc);
@@ -494,6 +488,9 @@ void Shell::relResrc(std::string &resrc, std::string &s_amt)
     }
 }
 
+/**
+ * handle lp
+ */
 void Shell::listProc()
 {
     std::cout<<"\n********************************************"<<std::endl;
@@ -526,6 +523,9 @@ void Shell::listProc()
     std::cout<<"\n********************************************"<<std::endl;
 }
 
+/**
+ * handle lr
+ */
 void Shell::listResrc()
 {
     std::cout<<"\n********************************************"<<std::endl;
