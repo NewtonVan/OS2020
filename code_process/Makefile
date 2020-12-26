@@ -17,4 +17,4 @@ cleanall : cleanobj cleanexe
 cleanobj :
 	@rm $(objects)
 cleanexe :
-	@rm *.exe
+	@rm test_shell
