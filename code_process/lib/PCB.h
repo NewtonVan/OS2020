@@ -10,9 +10,7 @@ class PCB
 private:
     int pid_;
     int priority_;
-    // enum{INIT, USER, SYSTEM}
     int state_;
-    // enum{READY, RUNNING, BLOCK} state_
     int wait_rid_;
     int wait_rnum_;
     std::map<int, int> resources_;
