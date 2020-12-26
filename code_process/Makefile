@@ -4,7 +4,7 @@ CXXFLAGS= -std=c++11 -Wall -Werror -I ./lib
 vpath %.cpp src
 vpath %.h lib
 
-test_shell.exe : $(objects)
+test_shell : $(objects)
 	@$(CXX) $(CXXFLAGS) -o $@ $(objects) 
 
 main.o : shell.h RCB.h hlibrary.h PCB.h
@@ -15,6 +15,6 @@ shell.o : shell.h RCB.h hlibrary.h PCB.h
 .PHONY: cleanall cleanobj cleanexe
 cleanall : cleanobj cleanexe
 cleanobj :
-	@del $(objects)
+	@rm $(objects)
 cleanexe :
-	@del *.exe
+	@rm *.exe
